@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './Home.css'; // Importez votre feuille de style CSS personnalisée
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+const {ipcRenderer} = window.require ('electron');
 
 const SigninForm = () => {
   const [email, setEmail] = useState ('');
@@ -22,14 +23,12 @@ const SigninForm = () => {
         console.log (response.data.message);
         const token = response.data.token;
 
-        if(token){
-
-console.log (token);
-localStorage.setItem ('token', token);
-navigate ('/about');
+        if (token) {
+          console.log (token);
+          localStorage.setItem ('token', token);
+         ipcRenderer.send ('redirect', 'about.html');
 
         }
-        
       })
       .catch (error => {
         // Traitez les erreurs de l'API ici

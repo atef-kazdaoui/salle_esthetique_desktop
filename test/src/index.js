@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import SigninForm from './Home/Home';
-import Bienvenue from './Bienvenue/Bienvenue';
-ReactDOM.render(
+
+
+ReactDOM.render (
   <Router>
+    <div className="App">
     <SigninForm />
     
 
-      
+
+      <Routes>
+       
+        <Route path="/" element={<SigninForm />} />
+      </Routes>
+    </div>
   </Router>,
-  document.getElementById('root')
+  document.getElementById ('root')
 );
