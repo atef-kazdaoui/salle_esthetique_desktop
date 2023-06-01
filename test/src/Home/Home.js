@@ -1,46 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import './Home.css';// Importez votre feuille de style CSS personnalisée
+import React, {useState} from 'react';
+import './Home.css'; // Importez votre feuille de style CSS personnalisée
 import axios from 'axios';
-const ipcRenderer = window.require('electron').ipcRenderer;
-const Store = window.require('electron-store');
-
-const store = new Store();
+import {useNavigate} from 'react-router-dom';
 
 const SigninForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState ('');
+  const [password, setPassword] = useState ('');
+  const navigate = useNavigate ();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = event => {
+    event.preventDefault ();
     const data = {
       adresse_email: email,
       password: password,
     };
-    axios.post('http://localhost:5000/users/login', data)
-      .then(response => {
+    axios
+      .post ('http://localhost:5000/users/login', data)
+      .then (response => {
         // Traitez la réponse de l'API ici
-        console.log(response.data);
+        console.log (response.data);
+        console.log (response.data.message);
         const token = response.data.token;
-        console.log(token);
-        store.set('token', token); // Stockez le token avec electron-store
-        alert('Bienvenue, Monsieur');
+
+        if(token){
+
+console.log (token);
+localStorage.setItem ('token', token);
+navigate ('/about');
+
+        }
+        
       })
-      .catch(error => {
+      .catch (error => {
         // Traitez les erreurs de l'API ici
-        console.error(error);
+        console.error (error);
       });
-    ipcRenderer.send('emailAndPassword', data);
   };
-
-  useEffect(() => {
-    ipcRenderer.on('emailAndPassword', (event, data) => {
-      console.log(data); // Affichez les données dans votre application React
-    });
-
-    return () => {
-      ipcRenderer.removeAllListeners('emailAndPassword');
-    };
-  }, []);
 
   return (
     <div className="container">
@@ -54,7 +49,7 @@ const SigninForm = () => {
             className="form-control"
             id="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={event => setEmail (event.target.value)}
           />
         </div>
 
@@ -65,7 +60,7 @@ const SigninForm = () => {
             className="form-control"
             id="password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={event => setPassword (event.target.value)}
           />
         </div>
 
