@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../assets/css/client.css">
+    <title>Client List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+       const { ipcRenderer } = require('electron');
+
+        function redirect(page) {
+            ipcRenderer.send('redirect', page);
+        }
+
+
+   async function handleDateSubmit() {
+        const date = document.getElementById('date').value;
+        const hour = document.getElementById('heure').value;
+        const minute = document.getElementById('minute').value;
+
+        const date_disponible = `${date} ${hour}:${minute}`;
+
+        try {
+            const response = await axios.post('http://localhost:5000/rendez-vous/ajouter_electron', {
+                date_disponible: date_disponible,
+                heure_disponible: hour,
+                minute_disponible: minute
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+        document.addEventListener('DOMContentLoaded', loadCategories);
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Nom de la marque</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="redirect('rendez-vous.html')">Rendez-vous</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="redirect('produits.html')">Produit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="redirect('ajouter.categorie.html')">Ajouter catégorie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="redirect('ajout.produit.html')">Ajouter produits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="redirect('client.html')">Nos client</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="redirect('ajouter.rdv.html')">Ajouter disponibilité </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div className='ajout_produit'>
+        <h1>Ajouter un produit</h1>
+    </div>
+
+<form onSubmit="handleSubmit(event)" className="form-ajout">
+    <div className="form-group">
+        <label htmlFor="date">Date disponible:</label>
+        <input type="date" placeholder='Date du produit' className="form-control" id="date" />
+    </div>
+    <div className="form-group">
+        <label htmlFor="heure">Heure disponible:</label>
+        <input type="number" placeholder='Heure du produit' className="form-control" id="heure" min="0" max="23" />
+    </div>
+    <div className="form-group">
+        <label htmlFor="minute">Minute disponible:</label>
+        <input type="number" placeholder='Minute du produit' className="form-control" id="minute" min="0" max="59" />
+    </div>
+
+    <button type="button" onclick="handleDateSubmit()" class="btn btn-primary">
+        Valider la date disponible
+    </button>
+</form>
+
+
+</body>
+
+</html>

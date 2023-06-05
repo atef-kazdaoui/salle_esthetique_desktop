@@ -26,7 +26,7 @@ const SigninForm = () => {
         if (token) {
           console.log (token);
           localStorage.setItem ('token', token);
-         ipcRenderer.send ('redirect', 'about.html');
+         ipcRenderer.send ('redirect', 'client.html');
 
         }
       })
